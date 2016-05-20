@@ -150,8 +150,8 @@ public class MainActivity extends AppCompatActivity
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new EquipsFragment(), "Nigga1");
-        adapter.addFragment(new ClassificacioFragment(), "Nigga2");
+        adapter.addFragment(new EquipsFragment(), "Equips");
+        adapter.addFragment(new ClassificacioFragment(), "Classificació");
         viewPager.setAdapter(adapter);
     }
 
