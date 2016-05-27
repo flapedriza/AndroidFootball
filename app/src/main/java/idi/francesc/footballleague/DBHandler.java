@@ -16,16 +16,16 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "football.db";
     private static final String CREATE_EQUIPS = "CREATE TABLE " + EquipsContract.EquipEntry.TABLE_NAME +
-            "(" + EquipsContract.EquipEntry.COLUMN_NAME_EQUIP_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "(" + EquipsContract.EquipEntry._ID + " INTEGER PRIMARY KEY," +
             EquipsContract.EquipEntry.COLUMN_NAME_NOM + " VARCHAR NOT NULL," +
-            EquipsContract.EquipEntry.COLUMN_NAME_ESCUT + " BLOB NOT NULL," +
+            EquipsContract.EquipEntry.COLUMN_NAME_ESCUT + " BLOB," +
             EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV + " INTEGER," +
             EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA + " INTEGER," +
             EquipsContract.EquipEntry.COLUMN_NAME_VICTORIES + " INTEGER," +
             EquipsContract.EquipEntry.COLUMN_NAME_DERROTES + " INTEGER," +
             EquipsContract.EquipEntry.COLUMN_NAME_EMPATS + " INTEGER);";
     private static final String CREATE_JUGADORS = "CREATE TABLE " + JugadorsContract.JugadorEntry.TABLE_NAME +
-            "(" + JugadorsContract.JugadorEntry.COLUMN_NAME_JUGADOR_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "(" + JugadorsContract.JugadorEntry._ID + " INTEGER PRIMARY KEY," +
             JugadorsContract.JugadorEntry.COLUMN_NAME_NOM + " VARCHAR NOT NULL," +
             JugadorsContract.JugadorEntry.COLUMN_NAME_COGNOMS + " VARCHAR," +
             JugadorsContract.JugadorEntry.COLUMN_NAME_GOLS + " INTEGER," +
@@ -69,7 +69,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void deleteEquip(int id) {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + EquipsContract.EquipEntry.TABLE_NAME + " WHERE " +
-                EquipsContract.EquipEntry.COLUMN_NAME_EQUIP_ID + "=" + id);
+                EquipsContract.EquipEntry._ID + "=" + id);
     }
 
     public void deleteJugador(String optn, int id) {
@@ -78,10 +78,10 @@ public class DBHandler extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(JugadorsContract.JugadorEntry.COLUMN_NAME_EQUIP, "reserva");
             db.update(JugadorsContract.JugadorEntry.TABLE_NAME, values,
-                    JugadorsContract.JugadorEntry.COLUMN_NAME_JUGADOR_ID + "=" + id , null);
+                    JugadorsContract.JugadorEntry._ID + "=" + id , null);
         }
         else db.execSQL("DELETE FROM " + JugadorsContract.JugadorEntry.TABLE_NAME + " WHERE " +
-                JugadorsContract.JugadorEntry.COLUMN_NAME_JUGADOR_ID + "=" + id);
+                JugadorsContract.JugadorEntry._ID + "=" + id);
     }
 
     public void updateEquip(Equip oldEquip, Equip newEquip) {
@@ -95,7 +95,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_DERROTES, newEquip.get_derrotes());
         SQLiteDatabase db = getWritableDatabase();
         db.update(EquipsContract.EquipEntry.TABLE_NAME, values,
-                EquipsContract.EquipEntry.COLUMN_NAME_EQUIP_ID + "=" + oldEquip.get_id(), null);
+                EquipsContract.EquipEntry._ID + "=" + oldEquip.get_id(), null);
     }
 
     public void updateJugador(Jugador oldJugador, Jugador newJugador) {
@@ -106,7 +106,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(JugadorsContract.JugadorEntry.COLUMN_NAME_EQUIP, newJugador.get_equip());
         SQLiteDatabase db = getWritableDatabase();
         db.update(JugadorsContract.JugadorEntry.TABLE_NAME, values,
-                JugadorsContract.JugadorEntry.COLUMN_NAME_JUGADOR_ID + "=" + oldJugador.get_id(), null);
+                JugadorsContract.JugadorEntry._ID + "=" + oldJugador.get_id(), null);
     }
 
     public ArrayList<Equip> getAllEquips() {
@@ -116,7 +116,7 @@ public class DBHandler extends SQLiteOpenHelper {
         c.moveToFirst();
         while(!c.isAfterLast()) {
             Equip e = new Equip();
-            e.set_id(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_EQUIP_ID)));
+            e.set_id(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry._ID)));
             e.set_nom(c.getString(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_NOM)));
             e.set_escut(c.getBlob(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_ESCUT)));
             e.set_gfavor(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV)));
@@ -141,7 +141,7 @@ public class DBHandler extends SQLiteOpenHelper {
         c.moveToFirst();
         while(!c.isAfterLast()) {
             Jugador j = new Jugador();
-            j.set_id(c.getInt(c.getColumnIndex(JugadorsContract.JugadorEntry.COLUMN_NAME_JUGADOR_ID)));
+            j.set_id(c.getInt(c.getColumnIndex(JugadorsContract.JugadorEntry._ID)));
             j.set_nom(c.getString(c.getColumnIndex(JugadorsContract.JugadorEntry.COLUMN_NAME_NOM)));
             j.set_cognoms(c.getString(c.getColumnIndex(JugadorsContract.JugadorEntry.COLUMN_NAME_COGNOMS)));
             j.set_gols(c.getInt(c.getColumnIndex(JugadorsContract.JugadorEntry.COLUMN_NAME_GOLS)));
