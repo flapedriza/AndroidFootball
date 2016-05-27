@@ -14,6 +14,8 @@ public class Jugador {
 
     }
 
+//    TODO afegir constructor amb id
+
     public Jugador(String nom, String cognoms, String equip, int gols) {
         this._nom = nom;
         this._cognoms = cognoms;

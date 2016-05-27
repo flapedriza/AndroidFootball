@@ -20,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -37,7 +39,16 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         fabadd = (FloatingActionButton) findViewById(R.id.fabadd);
         fabedit = (FloatingActionButton) findViewById(R.id.fabedit);
-        dbHandler = new DBHandler(this);
+        dbHandler = DBHandler.getDbInstance(this);
+        byte[] arr = {1};
+        Equip equip = new Equip("asd", arr, 4, 25,3, 5, 6);
+        Jugador jugador = new Jugador("a", "b", "asd", 45);
+        Partit partit = new Partit(equip,equip , new Date(1992,3,25), 2, 5);
+        dbHandler.addEquip(equip);
+        dbHandler.addJugador(jugador);
+        Log.v(this.toString(), dbHandler.getAllEquips().get(0).get_nom());
+        Log.v(this.toString(), dbHandler.getAllJugadorsEquip("asd").get(0).get_nom());
+//        TODO llistar elements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

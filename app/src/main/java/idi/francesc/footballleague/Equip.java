@@ -19,6 +19,8 @@ public class Equip {
 
     }
 
+    //TODO afegir constructor amb ID
+
     public Equip(String nom, byte[] escut, int gfavor, int gcontra, int victories, int derrotes, int empats) {
         this._nom = nom;
         this._escut = escut;

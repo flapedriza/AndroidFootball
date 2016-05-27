@@ -5,14 +5,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
-import java.security.PublicKey;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.SimpleTimeZone;
 
 /**
  * Created by Francesc Lapedriza.
  */
 public class DBHandler extends SQLiteOpenHelper {
+    private static DBHandler dbInstance;
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "football.db";
     private static final String CREATE_EQUIPS = "CREATE TABLE " + EquipsContract.EquipEntry.TABLE_NAME +
@@ -33,6 +37,25 @@ public class DBHandler extends SQLiteOpenHelper {
             "FOREIGN KEY (" + JugadorsContract.JugadorEntry.COLUMN_NAME_EQUIP + ") REFERENCES " +
             EquipsContract.EquipEntry.TABLE_NAME + "(" + EquipsContract.EquipEntry.COLUMN_NAME_NOM + "));";
 
+    private static final String CREATE_PARTITS = "CREATE TABLE " + PartitsContract.PartitsEntry.TABLE_NAME +
+            "(" + PartitsContract.PartitsEntry._ID + " INTEGER PRIMARY KEY," +
+            PartitsContract.PartitsEntry.COLUMN_NAME_DATA + " DATE NOT NULL," +
+            PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL + " VARCHAR NOT NULL," +
+            PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT + " VARCHAR NOT NULL," +
+            PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_LOCAL + " INTEGER NOT NULL," +
+            PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_VISITANT + " INTEGER NOT NULL," +
+            "FOREIGN KEY (" + PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL + ") REFERENCES " +
+            EquipsContract.EquipEntry.TABLE_NAME + "(" + EquipsContract.EquipEntry.COLUMN_NAME_NOM + ")," +
+            "FOREIGN KEY (" + PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT + ") REFERENCES " +
+            EquipsContract.EquipEntry.TABLE_NAME + "("  + EquipsContract.EquipEntry.COLUMN_NAME_NOM + "));";
+
+    public static synchronized DBHandler getDbInstance(Context context) {
+        if(dbInstance == null) {
+            dbInstance = new DBHandler(context);
+        }
+        return dbInstance;
+    }
+
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
@@ -50,7 +73,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_DERROTES, equip.get_derrotes());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(EquipsContract.EquipEntry.TABLE_NAME,
-                EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV,
+                null,
                 values);
     }
 
@@ -62,7 +85,20 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(JugadorsContract.JugadorEntry.COLUMN_NAME_EQUIP, jugador.get_equip());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(JugadorsContract.JugadorEntry.TABLE_NAME,
-                JugadorsContract.JugadorEntry.COLUMN_NAME_GOLS,
+                null,
+                values);
+    }
+
+    public void addPartit(Partit partit) {
+        ContentValues values = new ContentValues();
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_DATA, partit.get_Data().toString());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL, partit.get_Local().get_nom());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, partit.get_Visitant().get_nom());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_LOCAL, partit.get_GolsLocal());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, partit.get_GolsVisitant());
+        SQLiteDatabase db = getWritableDatabase();
+        db.insert(EquipsContract.EquipEntry.TABLE_NAME,
+                null,
                 values);
     }
 
@@ -82,6 +118,12 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         else db.execSQL("DELETE FROM " + JugadorsContract.JugadorEntry.TABLE_NAME + " WHERE " +
                 JugadorsContract.JugadorEntry._ID + "=" + id);
+    }
+
+    public void deletePartit(int id) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + PartitsContract.PartitsEntry.TABLE_NAME + "WHERE " +
+                EquipsContract.EquipEntry._ID + "=" + id);
     }
 
     public void updateEquip(Equip oldEquip, Equip newEquip) {
@@ -107,6 +149,18 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.update(JugadorsContract.JugadorEntry.TABLE_NAME, values,
                 JugadorsContract.JugadorEntry._ID + "=" + oldJugador.get_id(), null);
+    }
+
+    public void updatePartit(Partit oldPartit, Partit newPartit) {
+        ContentValues values = new ContentValues();
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_DATA, newPartit.get_Data().toString());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL, newPartit.get_Local().get_nom());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, newPartit.get_Visitant().get_nom());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_LOCAL, newPartit.get_GolsLocal());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, newPartit.get_GolsVisitant());
+        SQLiteDatabase db = getWritableDatabase();
+        db.update(PartitsContract.PartitsEntry.TABLE_NAME, values,
+                JugadorsContract.JugadorEntry._ID + "=" + oldPartit.get_ID(), null);
     }
 
     public ArrayList<Equip> getAllEquips() {
@@ -155,11 +209,28 @@ public class DBHandler extends SQLiteOpenHelper {
         return ret;
     }
 
+    public ArrayList<Partit> getPartitsByDate(Date date) {
+        ArrayList<Partit> ret = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.query(PartitsContract.PartitsEntry.TABLE_NAME, null, PartitsContract.PartitsEntry.COLUMN_NAME_DATA +
+        "=" + date,null, null, null, null);
+        c.moveToFirst();
+        while (!c.isAfterLast()) {
+           //TODO buscar manera d'obtenir objectes equip
+        }
+        return ret;
+    }
+
+    //TODO obtenir tots els partits
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_EQUIPS);
+        Log.v(this.toString(), "create equips");
         db.execSQL(CREATE_JUGADORS);
-
+        Log.v(this.toString(), "create jugadors");
+        db.execSQL(CREATE_PARTITS);
+        Log.v(this.toString(), "create partits");
     }
 
     @Override
