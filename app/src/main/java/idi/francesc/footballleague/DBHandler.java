@@ -7,10 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.SimpleTimeZone;
 
 /**
  * Created by Francesc Lapedriza.
@@ -28,6 +26,7 @@ public class DBHandler extends SQLiteOpenHelper {
             EquipsContract.EquipEntry.COLUMN_NAME_VICTORIES + " INTEGER," +
             EquipsContract.EquipEntry.COLUMN_NAME_DERROTES + " INTEGER," +
             EquipsContract.EquipEntry.COLUMN_NAME_EMPATS + " INTEGER);";
+
     private static final String CREATE_JUGADORS = "CREATE TABLE " + JugadorsContract.JugadorEntry.TABLE_NAME +
             "(" + JugadorsContract.JugadorEntry._ID + " INTEGER PRIMARY KEY," +
             JugadorsContract.JugadorEntry.COLUMN_NAME_NOM + " VARCHAR NOT NULL," +
@@ -35,19 +34,22 @@ public class DBHandler extends SQLiteOpenHelper {
             JugadorsContract.JugadorEntry.COLUMN_NAME_GOLS + " INTEGER," +
             JugadorsContract.JugadorEntry.COLUMN_NAME_EQUIP + " TEXT," +
             "FOREIGN KEY (" + JugadorsContract.JugadorEntry.COLUMN_NAME_EQUIP + ") REFERENCES " +
-            EquipsContract.EquipEntry.TABLE_NAME + "(" + EquipsContract.EquipEntry.COLUMN_NAME_NOM + "));";
+            EquipsContract.EquipEntry.TABLE_NAME + "(" + EquipsContract.EquipEntry.COLUMN_NAME_NOM + ") ON DELETE SET NULL" +
+            " ON UPDATE CASCADE);";
 
     private static final String CREATE_PARTITS = "CREATE TABLE " + PartitsContract.PartitsEntry.TABLE_NAME +
             "(" + PartitsContract.PartitsEntry._ID + " INTEGER PRIMARY KEY," +
             PartitsContract.PartitsEntry.COLUMN_NAME_DATA + " DATE NOT NULL," +
             PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL + " VARCHAR NOT NULL," +
             PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT + " VARCHAR NOT NULL," +
-            PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_LOCAL + " INTEGER NOT NULL," +
-            PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_VISITANT + " INTEGER NOT NULL," +
+            PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_LOCAL + " INTEGER," +
+            PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_VISITANT + " INTEGER," +
             "FOREIGN KEY (" + PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL + ") REFERENCES " +
-            EquipsContract.EquipEntry.TABLE_NAME + "(" + EquipsContract.EquipEntry.COLUMN_NAME_NOM + ")," +
+            EquipsContract.EquipEntry.TABLE_NAME + "(" + EquipsContract.EquipEntry.COLUMN_NAME_NOM + ") ON DELETE SET NULL " +
+            "ON UPDATE CASCADE," +
             "FOREIGN KEY (" + PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT + ") REFERENCES " +
-            EquipsContract.EquipEntry.TABLE_NAME + "("  + EquipsContract.EquipEntry.COLUMN_NAME_NOM + "));";
+            EquipsContract.EquipEntry.TABLE_NAME + "("  + EquipsContract.EquipEntry.COLUMN_NAME_NOM + ") ON DELETE SET NULL " +
+            "ON UPDATE CASCADE);";
 
     public static synchronized DBHandler getDbInstance(Context context) {
         if(dbInstance == null) {
@@ -92,8 +94,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public void addPartit(Partit partit) {
         ContentValues values = new ContentValues();
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_DATA, partit.get_Data().toString());
-        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL, partit.get_Local().get_nom());
-        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, partit.get_Visitant().get_nom());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL, partit.get_Local());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, partit.get_Visitant());
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_LOCAL, partit.get_GolsLocal());
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, partit.get_GolsVisitant());
         SQLiteDatabase db = getWritableDatabase();
@@ -110,7 +112,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void deleteJugador(String optn, int id) {
         SQLiteDatabase db = getWritableDatabase();
-        if(optn == "keepstat") {
+        if(optn == "KEEP_STATS") {
             ContentValues values = new ContentValues();
             values.put(JugadorsContract.JugadorEntry.COLUMN_NAME_EQUIP, "reserva");
             db.update(JugadorsContract.JugadorEntry.TABLE_NAME, values,
@@ -154,8 +156,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public void updatePartit(Partit oldPartit, Partit newPartit) {
         ContentValues values = new ContentValues();
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_DATA, newPartit.get_Data().toString());
-        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL, newPartit.get_Local().get_nom());
-        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, newPartit.get_Visitant().get_nom());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL, newPartit.get_Local());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, newPartit.get_Visitant());
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_LOCAL, newPartit.get_GolsLocal());
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, newPartit.get_GolsVisitant());
         SQLiteDatabase db = getWritableDatabase();

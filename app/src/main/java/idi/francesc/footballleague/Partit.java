@@ -1,5 +1,7 @@
 package idi.francesc.footballleague;
 
+import android.provider.Telephony;
+
 import java.util.Date;
 
 /**
@@ -7,15 +9,15 @@ import java.util.Date;
  */
 public class Partit {
     private int _ID;
-    private Equip _Local;
-    private Equip _Visitant;
+    private String _Local;
+    private String _Visitant;
     private Date _Data;
     private int _GolsLocal;
     private int _GolsVisitant;
 
     public Partit() {}
 
-    public Partit(Equip _Local, Equip _Visitant, Date _Data, int _GolsLocal, int _GolsVisitant) {
+    public Partit(String _Local, String _Visitant, Date _Data, int _GolsLocal, int _GolsVisitant) {
         this._Local = _Local;
         this._Visitant = _Visitant;
         this._Data = _Data;
@@ -23,13 +25,17 @@ public class Partit {
         this._GolsVisitant = _GolsVisitant;
     }
 
-    public Partit(int _ID, Equip _Local, Equip _Visitant, Date _Data, int _GolsLocal, int _GolsVisitant) {
+    public Partit(int _ID, String _Local, String _Visitant, Date _Data, int _GolsLocal, int _GolsVisitant) {
         this._ID = _ID;
         this._Local = _Local;
         this._Visitant = _Visitant;
         this._Data = _Data;
         this._GolsLocal = _GolsLocal;
         this._GolsVisitant = _GolsVisitant;
+    }
+
+    public Partit (Partit partit) {
+        this(partit.get_Local(), partit.get_Visitant(), partit.get_Data(), partit._GolsLocal, partit._GolsVisitant);
     }
 
     public int get_ID() {
@@ -40,19 +46,19 @@ public class Partit {
         this._ID = _ID;
     }
 
-    public Equip get_Local() {
+    public String get_Local() {
         return _Local;
     }
 
-    public void set_Local(Equip _Local) {
+    public void set_Local(String _Local) {
         this._Local = _Local;
     }
 
-    public Equip get_Visitant() {
+    public String get_Visitant() {
         return _Visitant;
     }
 
-    public void set_Visitant(Equip _Visitant) {
+    public void set_Visitant(String _Visitant) {
         this._Visitant = _Visitant;
     }
 
