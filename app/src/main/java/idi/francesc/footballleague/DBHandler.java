@@ -25,7 +25,8 @@ public class DBHandler extends SQLiteOpenHelper {
             EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA + " INTEGER," +
             EquipsContract.EquipEntry.COLUMN_NAME_VICTORIES + " INTEGER," +
             EquipsContract.EquipEntry.COLUMN_NAME_DERROTES + " INTEGER," +
-            EquipsContract.EquipEntry.COLUMN_NAME_EMPATS + " INTEGER);";
+            EquipsContract.EquipEntry.COLUMN_NAME_EMPATS + " INTEGER," +
+            EquipsContract.EquipEntry.COLUMN_NAME_PUNTS + " INTEGER);";
 
     private static final String CREATE_JUGADORS = "CREATE TABLE " + JugadorsContract.JugadorEntry.TABLE_NAME +
             "(" + JugadorsContract.JugadorEntry._ID + " INTEGER PRIMARY KEY," +
@@ -73,6 +74,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_VICTORIES, equip.get_victories());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_EMPATS, equip.get_empats());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_DERROTES, equip.get_derrotes());
+        values.put(EquipsContract.EquipEntry.COLUMN_NAME_PUNTS, equip.get_punts());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(EquipsContract.EquipEntry.TABLE_NAME,
                 null,
@@ -137,6 +139,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_VICTORIES, newEquip.get_victories());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_EMPATS, newEquip.get_empats());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_DERROTES, newEquip.get_derrotes());
+        values.put(EquipsContract.EquipEntry.COLUMN_NAME_PUNTS, newEquip.get_punts());
         SQLiteDatabase db = getWritableDatabase();
         db.update(EquipsContract.EquipEntry.TABLE_NAME, values,
                 EquipsContract.EquipEntry._ID + "=" + oldEquip.get_id(), null);
@@ -180,6 +183,11 @@ public class DBHandler extends SQLiteOpenHelper {
             e.set_victories(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_VICTORIES)));
             e.set_derrotes(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_DERROTES)));
             e.set_empats(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_EMPATS)));
+            int queryPunts = c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_PUNTS));
+            if(e.get_punts() != queryPunts) {
+                Log.e(this.toString(), "ELS PUNTS NO S'HAN CALCULAT CORRECTAMENT!!");
+                e.set_punts(queryPunts);
+            }
             ret.add(e);
             c.moveToNext();
 
@@ -227,6 +235,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Log.v(this.toString(), CREATE_EQUIPS);
         db.execSQL(CREATE_EQUIPS);
         Log.v(this.toString(), "create equips");
         db.execSQL(CREATE_JUGADORS);
@@ -237,6 +246,13 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + EquipsContract.EquipEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + JugadorsContract.JugadorEntry.TABLE_NAME);
+        onCreate(db);
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + EquipsContract.EquipEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + JugadorsContract.JugadorEntry.TABLE_NAME);
         onCreate(db);

@@ -43,10 +43,11 @@ public class MainActivity extends AppCompatActivity
         byte[] arr = {1};
         Equip equip = new Equip("asd", arr, 4, 25,3, 5, 6);
         Jugador jugador = new Jugador("a", "b", "asd", 45);
-        Partit partit = new Partit(equip,equip , new Date(1992,3,25), 2, 5);
+        Partit partit = new Partit(equip.get_nom(),equip.get_nom(), new Date(1992,3,25), 2, 5);
         dbHandler.addEquip(equip);
         dbHandler.addJugador(jugador);
-        Log.v(this.toString(), dbHandler.getAllEquips().get(0).get_nom());
+        Equip e = dbHandler.getAllEquips().get(0);
+        Log.v(this.toString(), e.get_nom() + "  " + e.get_punts());
         Log.v(this.toString(), dbHandler.getAllJugadorsEquip("asd").get(0).get_nom());
 //        TODO llistar elements
 

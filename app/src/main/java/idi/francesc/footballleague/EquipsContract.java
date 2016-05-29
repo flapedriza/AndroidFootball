@@ -17,6 +17,7 @@ public class EquipsContract {
         public static final String COLUMN_NAME_VICTORIES = "victories";
         public static final String COLUMN_NAME_DERROTES = "derrotes";
         public static final String COLUMN_NAME_EMPATS = "empats";
+        public static final String COLUMN_NAME_PUNTS = "punts";
 
     }
 }

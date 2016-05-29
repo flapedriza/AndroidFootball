@@ -1,6 +1,6 @@
 package idi.francesc.footballleague;
 
-import android.media.Image;
+import java.util.Comparator;
 
 /**
  * Created by franc on 23/05/2016.
@@ -14,12 +14,23 @@ public class Equip {
     private int _victories;
     private int _derrotes;
     private int _empats;
+    private int _punts;
 
     public Equip() {
 
     }
 
-    //TODO afegir constructor amb ID
+    public Equip(int _id, String _nom, byte[] _escut, int _gfavor, int _gcontra, int _victories, int _derrotes, int _empats) {
+        this._id = _id;
+        this._nom = _nom;
+        this._escut = _escut;
+        this._gfavor = _gfavor;
+        this._gcontra = _gcontra;
+        this._victories = _victories;
+        this._derrotes = _derrotes;
+        this._empats = _empats;
+        this._punts = (_victories*3) + (_empats);
+    }
 
     public Equip(String nom, byte[] escut, int gfavor, int gcontra, int victories, int derrotes, int empats) {
         this._nom = nom;
@@ -29,6 +40,7 @@ public class Equip {
         this._victories = victories;
         this._derrotes = derrotes;
         this._empats = empats;
+        this._punts = (victories*3) + (empats);
     }
 
     public int get_id() {
@@ -76,7 +88,9 @@ public class Equip {
     }
 
     public void set_victories(int _victories) {
+        int anterior = this._victories;
         this._victories = _victories;
+        _punts += (_victories - anterior)*3;
     }
 
     public int get_derrotes() {
@@ -92,6 +106,17 @@ public class Equip {
     }
 
     public void set_empats(int _empats) {
+        int anterior = this._empats;
         this._empats = _empats;
+        _punts += (_empats - anterior);
+
+    }
+
+    public int get_punts() {
+        return _punts;
+    }
+
+    public void set_punts(int _punts) {
+        this._punts = _punts;
     }
 }
