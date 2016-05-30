@@ -39,16 +39,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         fabadd = (FloatingActionButton) findViewById(R.id.fabadd);
         fabedit = (FloatingActionButton) findViewById(R.id.fabedit);
-        dbHandler = DBHandler.getDbInstance(this);
-        byte[] arr = {1};
-        Equip equip = new Equip("asd", arr, 4, 25,3, 5, 6);
-        Jugador jugador = new Jugador("a", "b", "asd", 45);
-        Partit partit = new Partit(equip.get_nom(),equip.get_nom(), new Date(1992,3,25), 2, 5);
-        dbHandler.addEquip(equip);
-        dbHandler.addJugador(jugador);
-        Equip e = dbHandler.getAllEquips().get(0);
-        Log.v(this.toString(), e.get_nom() + "  " + e.get_punts());
-        Log.v(this.toString(), dbHandler.getAllJugadorsEquip("asd").get(0).get_nom());
 //        TODO llistar elements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

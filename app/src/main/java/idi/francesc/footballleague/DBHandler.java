@@ -55,6 +55,14 @@ public class DBHandler extends SQLiteOpenHelper {
     public static synchronized DBHandler getDbInstance(Context context) {
         if(dbInstance == null) {
             dbInstance = new DBHandler(context);
+            byte[] arr = {1};
+            Equip equip = new Equip("asd", arr, 4, 25,3, 5, 6);
+            Equip equip2 = new Equip("fsdgsg", arr, 4, 25,12, 5, 6);
+            Jugador jugador = new Jugador("a", "b", "asd", 45);
+            Partit partit = new Partit(equip.get_nom(),equip.get_nom(), new Date(1992,3,25), 2, 5);
+            dbInstance.addEquip(equip);
+            dbInstance.addEquip(equip2);
+            dbInstance.addJugador(jugador);
         }
         return dbInstance;
     }
@@ -195,6 +203,15 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
         return ret;
+    }
+
+    public Cursor cursorClassificacio() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + EquipsContract.EquipEntry.TABLE_NAME + " ORDER BY " +
+                EquipsContract.EquipEntry.COLUMN_NAME_PUNTS + " DESC, " + EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV + " DESC", null);
+        if(c != null) c.moveToFirst();
+        return c;
+
     }
 
     public ArrayList<Jugador> getAllJugadorsEquip(String equip) {
