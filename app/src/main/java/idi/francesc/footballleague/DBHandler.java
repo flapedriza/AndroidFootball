@@ -56,7 +56,7 @@ public class DBHandler extends SQLiteOpenHelper {
         if(dbInstance == null) {
             dbInstance = new DBHandler(context);
             byte[] arr = {1};
-            Equip equip = new Equip("asd", arr, 4, 25,3, 5, 6);
+            Equip equip = new Equip("FC Barcelona", arr, 4, 25,20, 10, 12);
             Equip equip2 = new Equip("fsdgsg", arr, 4, 25,12, 5, 6);
             Jugador jugador = new Jugador("a", "b", "asd", 45);
             Partit partit = new Partit(equip.get_nom(),equip.get_nom(), new Date(1992,3,25), 2, 5);

@@ -4,10 +4,81 @@
              android:layout_height="match_parent"
              tools:context="idi.francesc.footballleague.ClassificacioFragment">
 
-    <ListView
-        android:id="@+id/classificacio"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </ListView>
+
+        <RelativeLayout
+            android:id="@+id/header_classificacio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/header_equip"
+                android:textSize="18sp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="28dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/header_victories"
+                android:textSize="18sp"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/header_d"
+                android:layout_marginEnd="30dp"
+                />
+
+            <TextView
+                android:id="@+id/header_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/header_derrotes"
+                android:textSize="18sp"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/header_e"
+                android:layout_marginEnd="27dp"
+                />
+
+            <TextView
+                android:id="@+id/header_e"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/header_empats"
+                android:textSize="18sp"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/header_p"
+                android:layout_marginEnd="38dp"
+                />
+
+            <TextView
+                android:id="@+id/header_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="@string/header_punts"
+                android:textSize="18sp"
+                android:layout_marginEnd="12dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"/>
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/classificacio"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/header_classificacio">
+        </ListView>
+    </RelativeLayout>
+
 
 </FrameLayout>

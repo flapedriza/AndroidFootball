@@ -6,6 +6,9 @@
 
     <string name="action_settings">Settings</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="header_equip">EQUIP</string>
+    <string name="header_victories">V</string>
+    <string name="header_empats">E</string>
+    <string name="header_derrotes">D</string>
+    <string name="header_punts">P</string>
 </resources>

@@ -1,27 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
-    <TableRow
-        android:id="@+id/TableRow1"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content">
-        <ImageView
-            android:id="@+id/escut"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"/>
         <TextView
-            android:id="@+id/nom_equip"
+            android:id="@+id/item_nom"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="?android:attr/listPreferredItemHeight"
+            android:layout_height="?android:attr/listPreferredItemHeight"
             android:gravity="center_vertical"
-            android:padding="10dp"/>
+            android:textSize="20sp"
+            android:padding="2dp"
+            android:layout_marginStart="10dp"
+            android:text="F.C. Barcelona"/>
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/punts_classif"/>
-    </TableRow>
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            android:id="@+id/item_victories"
+            android:padding="2dp"
+            android:textSize="15sp"
+            android:text="10"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/item_derrotes"
+            android:layout_marginEnd="25dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            android:id="@+id/item_derrotes"
+            android:padding="2dp"
+            android:textSize="15sp"
+            android:text="20"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/item_empats"
+            android:layout_marginEnd="25dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            android:id="@+id/item_empats"
+            android:padding="2dp"
+            android:textSize="15sp"
+            android:text="30"
+            android:gravity="center_vertical"
+            android:layout_alignParentTop="true"
+            android:layout_toStartOf="@+id/item_punts"
+            android:layout_marginEnd="25dp"/>
 
-</TableLayout>
+        <TextView
+            android:layout_height="?android:attr/listPreferredItemHeight"
+            android:layout_width="wrap_content"
+            android:id="@+id/item_punts"
+            android:padding="6dp"
+            android:textSize="18sp"
+            android:text="40"
+            android:gravity="center_vertical"
+            android:layout_marginEnd="2dp"
+            android:layout_alignParentEnd="true"/>
+
+
+</RelativeLayout>
