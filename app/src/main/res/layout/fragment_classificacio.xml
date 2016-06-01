@@ -7,77 +7,93 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/header_classificacio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="8.5"
             android:background="@color/colorPrimary">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:gravity="center_vertical|center_horizontal"
                 android:text="@string/header_equip"
                 android:textSize="18sp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="28dp"
+                android:textColor="#FFF"
+                android:layout_weight="4"
                 />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:textColor="#FFF"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/header_victories"
                 android:textSize="18sp"
-                android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/header_d"
-                android:layout_marginEnd="30dp"
                 />
 
             <TextView
-                android:id="@+id/header_d"
-                android:layout_width="wrap_content"
+                android:textColor="#FFF"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/header_derrotes"
                 android:textSize="18sp"
-                android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/header_e"
-                android:layout_marginEnd="27dp"
                 />
 
             <TextView
-                android:id="@+id/header_e"
-                android:layout_width="wrap_content"
+                android:textColor="#FFF"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/header_empats"
                 android:textSize="18sp"
-                android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/header_p"
-                android:layout_marginEnd="38dp"
                 />
 
             <TextView
+                android:textColor="#FFF"
                 android:id="@+id/header_p"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_weight="1.5"
+                android:gravity="center"
                 android:text="@string/header_punts"
                 android:textSize="18sp"
-                android:layout_marginEnd="12dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"/>
-        </RelativeLayout>
+                />
+        </LinearLayout>
 
-        <ListView
-            android:id="@+id/classificacio"
-            android:layout_width="match_parent"
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_height="match_parent"
-            android:layout_below="@+id/header_classificacio">
-        </ListView>
+            android:layout_width="match_parent"
+            android:id="@+id/swipe_classif"
+            android:layout_below="@id/header_classificacio"
+            >
+
+            <ListView
+                android:id="@+id/list_classificacio"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+            <LinearLayout
+                android:id="@+id/empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/empty_text"/>
+            </LinearLayout>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
     </RelativeLayout>
 
 

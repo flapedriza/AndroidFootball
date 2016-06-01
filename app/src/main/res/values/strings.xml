@@ -6,9 +6,11 @@
 
     <string name="action_settings">Settings</string>
 
-    <string name="header_equip">EQUIP</string>
+    <string name="header_equip">NOM</string>
     <string name="header_victories">V</string>
     <string name="header_empats">E</string>
     <string name="header_derrotes">D</string>
     <string name="header_punts">P</string>
+
+    <string name="empty_text">No hi ha elements a mostrar</string>
 </resources>

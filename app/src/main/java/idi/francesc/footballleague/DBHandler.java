@@ -55,14 +55,14 @@ public class DBHandler extends SQLiteOpenHelper {
     public static synchronized DBHandler getDbInstance(Context context) {
         if(dbInstance == null) {
             dbInstance = new DBHandler(context);
-            byte[] arr = {1};
+            /*byte[] arr = {1};
             Equip equip = new Equip("FC Barcelona", arr, 4, 25,20, 10, 12);
             Equip equip2 = new Equip("fsdgsg", arr, 4, 25,12, 5, 6);
             Jugador jugador = new Jugador("a", "b", "asd", 45);
             Partit partit = new Partit(equip.get_nom(),equip.get_nom(), new Date(1992,3,25), 2, 5);
             dbInstance.addEquip(equip);
             dbInstance.addEquip(equip2);
-            dbInstance.addJugador(jugador);
+            dbInstance.addJugador(jugador);*/
         }
         return dbInstance;
     }
@@ -193,7 +193,7 @@ public class DBHandler extends SQLiteOpenHelper {
             e.set_empats(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_EMPATS)));
             int queryPunts = c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_PUNTS));
             if(e.get_punts() != queryPunts) {
-                Log.e(this.toString(), "ELS PUNTS NO S'HAN CALCULAT CORRECTAMENT!!");
+                Log.e(this.toString(), "ELS PUNTS NO S'HAN CALCULAT CORRECTAMENT!!", new NullPointerException("PUNTS!!"));
                 e.set_punts(queryPunts);
             }
             ret.add(e);
@@ -208,7 +208,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public Cursor cursorClassificacio() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + EquipsContract.EquipEntry.TABLE_NAME + " ORDER BY " +
-                EquipsContract.EquipEntry.COLUMN_NAME_PUNTS + " DESC, " + EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV + " DESC", null);
+                EquipsContract.EquipEntry.COLUMN_NAME_PUNTS + " DESC, " + EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV + " DESC," +
+                EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA + " ASC", null);
         if(c != null) c.moveToFirst();
         return c;
 
