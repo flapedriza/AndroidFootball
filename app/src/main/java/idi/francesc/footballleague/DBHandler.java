@@ -1,11 +1,13 @@
 package idi.francesc.footballleague;
 
+import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,24 +53,29 @@ public class DBHandler extends SQLiteOpenHelper {
             "FOREIGN KEY (" + PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT + ") REFERENCES " +
             EquipsContract.EquipEntry.TABLE_NAME + "("  + EquipsContract.EquipEntry.COLUMN_NAME_NOM + ") ON DELETE SET NULL " +
             "ON UPDATE CASCADE);";
+    Context context;
 
     public static synchronized DBHandler getDbInstance(Context context) {
         if(dbInstance == null) {
+            Toast.makeText(context, "Crear DB Instance", Toast.LENGTH_SHORT).show();
             dbInstance = new DBHandler(context);
-            /*byte[] arr = {1};
-            Equip equip = new Equip("FC Barcelona", arr, 4, 25,20, 10, 12);
-            Equip equip2 = new Equip("fsdgsg", arr, 4, 25,12, 5, 6);
-            Jugador jugador = new Jugador("a", "b", "asd", 45);
-            Partit partit = new Partit(equip.get_nom(),equip.get_nom(), new Date(1992,3,25), 2, 5);
-            dbInstance.addEquip(equip);
-            dbInstance.addEquip(equip2);
-            dbInstance.addJugador(jugador);*/
+            if (dbInstance.getAllEquips().size() == 0) {
+                byte[] arr = {1};
+                Equip equip = new Equip("F.C. Barcelona", arr, 4, 25,20, 10, 12);
+                Equip equip2 = new Equip("F.C. MenysPunts", arr, 4, 25,12, 5, 6);
+                Jugador jugador = new Jugador("a", "b", "asd", 45);
+                Partit partit = new Partit(equip.get_nom(),equip.get_nom(), new Date(1992,3,25), 2, 5);
+                dbInstance.addEquip(equip);
+                dbInstance.addEquip(equip2);
+                dbInstance.addJugador(jugador);
+            }
         }
         return dbInstance;
     }
 
     public DBHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;
 
     }
 
@@ -116,8 +123,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void deleteEquip(int id) {
         SQLiteDatabase db = getWritableDatabase();
+        Toast.makeText(context, "Borrar equip " + id, Toast.LENGTH_LONG).show();
         db.execSQL("DELETE FROM " + EquipsContract.EquipEntry.TABLE_NAME + " WHERE " +
-                EquipsContract.EquipEntry._ID + "=" + id);
+                EquipsContract.EquipEntry._ID + "="+id);
     }
 
     public void deleteJugador(String optn, int id) {
@@ -253,6 +261,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        Toast.makeText(context ,(CharSequence) "CREADA DB", Toast.LENGTH_LONG).show();
         Log.v(this.toString(), CREATE_EQUIPS);
         db.execSQL(CREATE_EQUIPS);
         Log.v(this.toString(), "create equips");
