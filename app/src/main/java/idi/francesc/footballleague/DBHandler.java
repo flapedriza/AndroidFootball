@@ -213,6 +213,27 @@ public class DBHandler extends SQLiteOpenHelper {
         return ret;
     }
 
+    public Equip getEquipById(int id) {
+        Equip equip = new Equip();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + EquipsContract.EquipEntry.TABLE_NAME + " WHERE " +
+        EquipsContract.EquipEntry._ID + " = " + id, null);
+        if (c.moveToFirst()) {
+            equip.set_id(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry._ID)));
+            equip.set_nom(c.getString(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_NOM)));
+            equip.set_escut(c.getBlob(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_ESCUT)));
+            equip.set_gfavor(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV)));
+            equip.set_gcontra(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA)));
+            equip.set_victories(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_VICTORIES)));
+            equip.set_derrotes(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_DERROTES)));
+            equip.set_empats(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_EMPATS)));
+        }
+        c.close();
+        db.close();
+        return equip;
+
+    }
+
     public Cursor cursorClassificacio() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + EquipsContract.EquipEntry.TABLE_NAME + " ORDER BY " +

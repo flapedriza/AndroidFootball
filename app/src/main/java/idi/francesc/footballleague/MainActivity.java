@@ -1,5 +1,6 @@
 package idi.francesc.footballleague;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,7 +28,6 @@ public class MainActivity extends AppCompatActivity
     private ViewPager viewPager;
     private FloatingActionButton fabedit;
     private FloatingActionButton fabadd;
-    private DBHandler dbHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +76,9 @@ public class MainActivity extends AppCompatActivity
         fabadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Clicked add button", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(MainActivity.this, AddEditEquipActivity.class);
+                intent.putExtra("edit", false);
+                startActivity(intent);
             }
         });
 

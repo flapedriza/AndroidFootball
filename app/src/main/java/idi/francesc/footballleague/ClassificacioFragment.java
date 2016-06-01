@@ -62,10 +62,14 @@ public class ClassificacioFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final CharSequence nom = ((TextView) view.findViewById(R.id.item_nom)).getText();
+                //final CharSequence nom = ((TextView) view.findViewById(R.id.item_nom)).getText();
                 final int ident = Integer.parseInt(((TextView) view.findViewById(R.id.item_identificador)).getText().toString());
+                Intent intent = new Intent(getContext(), AddEditEquipActivity.class);
+                intent.putExtra("edit", true);
+                intent.putExtra("id", ident);
+                startActivity(intent);
                 //Toast.makeText(getContext(), nom, Toast.LENGTH_SHORT).show();
-                new AlertDialog.Builder(getContext())
+                /*new AlertDialog.Builder(getContext())
                         .setTitle(nom + " " + ident)
                         .setMessage("Eliminar equip?")
                         .setPositiveButton("si", new DialogInterface.OnClickListener() {
@@ -89,7 +93,7 @@ public class ClassificacioFragment extends Fragment {
                                 getActivity().finish();
                             }
                         })
-                        .show();
+                        .show();*/
 
             }
         });
