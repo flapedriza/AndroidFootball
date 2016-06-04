@@ -25,13 +25,15 @@ import android.widget.Toast;
 
 public class ClassificacioFragment extends Fragment {
 
+    ListView listView;
+    SimpleCursorAdapter adapter;
+    SwipeRefreshLayout swipeRefreshLayout;
+
     public ClassificacioFragment() {
 
     }
 
-    ListView listView;
-    SimpleCursorAdapter adapter;
-    SwipeRefreshLayout swipeRefreshLayout;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,8 +55,8 @@ public class ClassificacioFragment extends Fragment {
             public void onRefresh() {
                 DBHandler handler = DBHandler.getDbInstance(getContext());
                 byte[] arr = {1};
-                Equip equip = new Equip("F.C. MoltsGols", arr, 45, 2, 20, 10, 12);
-                Equip equip2 = new Equip("F.C. PocsGols", arr, 0, 2, 20, 10, 12);
+                Equip equip = new Equip("F.C. MoltsGols", "Barcelona", arr, 45, 2, 20, 10, 12);
+                Equip equip2 = new Equip("F.C. PocsGols", "Barcelona", arr, 0, 2, 20, 10, 12);
                 handler.addEquip(equip);
                 handler.addEquip(equip2);
                 SimpleCursorAdapter adapter = new SimpleCursorAdapter(rootview.getContext(), R.layout.equip_row,

@@ -15,14 +15,16 @@ public class Equip {
     private int _derrotes;
     private int _empats;
     private int _punts;
+    private String _ciutat;
 
     public Equip() {
         this._id = -1;
     }
 
-    public Equip(int _id, String _nom, byte[] _escut, int _gfavor, int _gcontra, int _victories, int _derrotes, int _empats) {
+    public Equip(int _id, String _nom, String ciutat, byte[] _escut, int _gfavor, int _gcontra, int _victories, int _derrotes, int _empats) {
         this._id = _id;
         this._nom = _nom;
+        this._ciutat = ciutat;
         this._escut = _escut;
         this._gfavor = _gfavor;
         this._gcontra = _gcontra;
@@ -32,9 +34,10 @@ public class Equip {
         this._punts = (_victories*3) + (_empats);
     }
 
-    public Equip(String nom, byte[] escut, int gfavor, int gcontra, int victories, int derrotes, int empats) {
+    public Equip(String nom, String _ciutat, byte[] escut, int gfavor, int gcontra, int victories, int derrotes, int empats) {
         this._id = -2;
         this._nom = nom;
+        this._ciutat = _ciutat;
         this._escut = escut;
         this._gfavor = gfavor;
         this._gcontra = gcontra;
@@ -58,6 +61,14 @@ public class Equip {
 
     public void set_nom(String _nom) {
         this._nom = _nom;
+    }
+
+    public String get_ciutat() {
+        return _ciutat;
+    }
+
+    public void set_ciutat(String _ciutat) {
+        this._ciutat = _ciutat;
     }
 
     public byte[] get_escut() {

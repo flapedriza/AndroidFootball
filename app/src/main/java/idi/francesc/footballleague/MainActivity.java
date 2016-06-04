@@ -1,7 +1,9 @@
 package idi.francesc.footballleague;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -10,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -33,10 +36,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(prefs.getBoolean("firstTime", true)) {
+            DBHandler handler = DBHandler.getDbInstance(this);
+            //TODO Afegir equips, jugadors i partits
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("firstTime",false);
+            editor.commit();
+        }
         setContentView(R.layout.activity_main);
         fabadd = (FloatingActionButton) findViewById(R.id.fabadd);
         fabedit = (FloatingActionButton) findViewById(R.id.fabedit);
-//        TODO llistar elements
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

@@ -3,11 +3,16 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context=".PartitsFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <ImageView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:id="@+id/swipe_partits"
+        >
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/list_partits"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

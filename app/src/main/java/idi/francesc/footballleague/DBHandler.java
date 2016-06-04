@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -22,6 +23,7 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String CREATE_EQUIPS = "CREATE TABLE " + EquipsContract.EquipEntry.TABLE_NAME +
             "(" + EquipsContract.EquipEntry._ID + " INTEGER PRIMARY KEY," +
             EquipsContract.EquipEntry.COLUMN_NAME_NOM + " VARCHAR NOT NULL," +
+            EquipsContract.EquipEntry.COLUM_NAME_CIUTAT + " VARCHAR," +
             EquipsContract.EquipEntry.COLUMN_NAME_ESCUT + " BLOB," +
             EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV + " INTEGER," +
             EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA + " INTEGER," +
@@ -59,16 +61,10 @@ public class DBHandler extends SQLiteOpenHelper {
         if(dbInstance == null) {
 //            Toast.makeText(context, "Crear DB Instance", Toast.LENGTH_SHORT).show();
             dbInstance = new DBHandler(context);
-            if (dbInstance.getAllEquips().size() == 0) {
-                byte[] arr = {1};
-                Equip equip = new Equip("F.C. Barcelona", arr, 4, 25,20, 10, 12);
-                Equip equip2 = new Equip("F.C. MenysPunts", arr, 4, 25,12, 5, 6);
-                Jugador jugador = new Jugador("a", "b", "asd", 45);
-                Partit partit = new Partit(equip.get_nom(),equip.get_nom(), new Date(1992,3,25), 2, 5);
-                dbInstance.addEquip(equip);
-                dbInstance.addEquip(equip2);
-                dbInstance.addJugador(jugador);
-            }
+            Partit partit = new Partit("F.C. Barcelona", "Real Madrid", new Date(2016,8,27), 6, 1);
+            Partit partit1 = new Partit("R.C.D. Espanyol", "F.C. nens paralitics", new Date(1945, 3, 21), 0, 21);
+            dbInstance.addPartit(partit);
+            dbInstance.addPartit(partit1);
         }
         return dbInstance;
     }
@@ -83,6 +79,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void addEquip(Equip equip) {
         ContentValues values = new ContentValues();
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_NOM, equip.get_nom());
+        values.put(EquipsContract.EquipEntry.COLUM_NAME_CIUTAT, equip.get_ciutat());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_ESCUT, equip.get_escut());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV, equip.get_gfavor());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA, equip.get_gcontra());
@@ -149,6 +146,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void updateEquip(Equip newEquip) {
         ContentValues values = new ContentValues();
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_NOM, newEquip.get_nom());
+        values.put(EquipsContract.EquipEntry.COLUM_NAME_CIUTAT, newEquip.get_ciutat());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_ESCUT, newEquip.get_escut());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV, newEquip.get_gfavor());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA, newEquip.get_gcontra());
@@ -213,6 +211,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return ret;
     }
 
+    public int getNombreEquips() {
+        SQLiteDatabase db = getReadableDatabase();
+        return (int) (long) DatabaseUtils.queryNumEntries(db, EquipsContract.EquipEntry.TABLE_NAME);
+    }
+
     public Equip getEquipById(int id) {
         Equip equip = new Equip();
         SQLiteDatabase db = getReadableDatabase();
@@ -266,19 +269,13 @@ public class DBHandler extends SQLiteOpenHelper {
         return ret;
     }
 
-    public ArrayList<Partit> getPartitsByDate(Date date) {
-        ArrayList<Partit> ret = new ArrayList<>();
+    public Cursor cursorPartits() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.query(PartitsContract.PartitsEntry.TABLE_NAME, null, PartitsContract.PartitsEntry.COLUMN_NAME_DATA +
-        "=" + date,null, null, null, null);
-        c.moveToFirst();
-        while (!c.isAfterLast()) {
-           //TODO buscar manera d'obtenir objectes equip
-        }
-        return ret;
+        Cursor c = db.rawQuery("SELECT * FROM " + PartitsContract.PartitsEntry.TABLE_NAME +
+        " ORDER BY " + PartitsContract.PartitsEntry.COLUMN_NAME_DATA + " DESC", null);
+        if(c != null) c.moveToFirst();
+        return c;
     }
-
-    //TODO obtenir tots els partits
 
     @Override
     public void onCreate(SQLiteDatabase db) {
