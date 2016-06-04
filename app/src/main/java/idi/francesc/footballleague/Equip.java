@@ -17,7 +17,7 @@ public class Equip {
     private int _punts;
 
     public Equip() {
-
+        this._id = -1;
     }
 
     public Equip(int _id, String _nom, byte[] _escut, int _gfavor, int _gcontra, int _victories, int _derrotes, int _empats) {
@@ -33,6 +33,7 @@ public class Equip {
     }
 
     public Equip(String nom, byte[] escut, int gfavor, int gcontra, int victories, int derrotes, int empats) {
+        this._id = -2;
         this._nom = nom;
         this._escut = escut;
         this._gfavor = gfavor;

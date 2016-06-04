@@ -12,5 +12,8 @@
     <string name="header_derrotes">D</string>
     <string name="header_punts">P</string>
 
+    <string name="option_delete">Borrar</string>
+    <string name="option_save">Guardar</string>
+
     <string name="empty_text">No hi ha elements a mostrar</string>
 </resources>

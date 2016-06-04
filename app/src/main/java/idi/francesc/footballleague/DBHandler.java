@@ -57,7 +57,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public static synchronized DBHandler getDbInstance(Context context) {
         if(dbInstance == null) {
-            Toast.makeText(context, "Crear DB Instance", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "Crear DB Instance", Toast.LENGTH_SHORT).show();
             dbInstance = new DBHandler(context);
             if (dbInstance.getAllEquips().size() == 0) {
                 byte[] arr = {1};
@@ -123,7 +123,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void deleteEquip(int id) {
         SQLiteDatabase db = getWritableDatabase();
-        Toast.makeText(context, "Borrar equip " + id, Toast.LENGTH_LONG).show();
+//        Toast.makeText(context, "Borrar equip " + id, Toast.LENGTH_LONG).show();
         db.execSQL("DELETE FROM " + EquipsContract.EquipEntry.TABLE_NAME + " WHERE " +
                 EquipsContract.EquipEntry._ID + "="+id);
     }
@@ -146,7 +146,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 EquipsContract.EquipEntry._ID + "=" + id);
     }
 
-    public void updateEquip(Equip oldEquip, Equip newEquip) {
+    public void updateEquip(Equip newEquip) {
         ContentValues values = new ContentValues();
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_NOM, newEquip.get_nom());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_ESCUT, newEquip.get_escut());
@@ -158,7 +158,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_PUNTS, newEquip.get_punts());
         SQLiteDatabase db = getWritableDatabase();
         db.update(EquipsContract.EquipEntry.TABLE_NAME, values,
-                EquipsContract.EquipEntry._ID + "=" + oldEquip.get_id(), null);
+                EquipsContract.EquipEntry._ID + "=" + newEquip.get_id(), null);
     }
 
     public void updateJugador(Jugador oldJugador, Jugador newJugador) {
@@ -201,7 +201,7 @@ public class DBHandler extends SQLiteOpenHelper {
             e.set_empats(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_EMPATS)));
             int queryPunts = c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_PUNTS));
             if(e.get_punts() != queryPunts) {
-                Log.e(this.toString(), "ELS PUNTS NO S'HAN CALCULAT CORRECTAMENT!!", new NullPointerException("PUNTS!!"));
+                Log.e(this.toString(), "ELS PUNTS NO S'HAN CALCULAT CORRECTAMENT!!");
                 e.set_punts(queryPunts);
             }
             ret.add(e);
@@ -282,7 +282,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Toast.makeText(context ,(CharSequence) "CREADA DB", Toast.LENGTH_LONG).show();
+//        Toast.makeText(context ,(CharSequence) "CREADA DB", Toast.LENGTH_LONG).show();
         Log.v(this.toString(), CREATE_EQUIPS);
         db.execSQL(CREATE_EQUIPS);
         Log.v(this.toString(), "create equips");

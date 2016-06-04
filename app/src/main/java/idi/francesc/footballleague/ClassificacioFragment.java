@@ -29,6 +29,10 @@ public class ClassificacioFragment extends Fragment {
 
     }
 
+    ListView listView;
+    SimpleCursorAdapter adapter;
+    SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -38,9 +42,9 @@ public class ClassificacioFragment extends Fragment {
                 EquipsContract.EquipEntry.COLUMN_NAME_EMPATS,  EquipsContract.EquipEntry.COLUMN_NAME_PUNTS};
         final int[] to = {R.id.item_identificador,R.id.item_nom, R.id.item_victories, R.id.item_derrotes, R.id.item_empats, R.id.item_punts};
         final View rootview =  inflater.inflate(R.layout.fragment_classificacio, container, false);
-        final ListView listView = (ListView) rootview.findViewById(R.id.list_classificacio);
-        final SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.swipe_classif);
-        final SimpleCursorAdapter adapter = new SimpleCursorAdapter(rootview.getContext(), R.layout.equip_row,
+        listView = (ListView) rootview.findViewById(R.id.list_classificacio);
+        swipeRefreshLayout = (SwipeRefreshLayout) rootview.findViewById(R.id.swipe_classif);
+        adapter = new SimpleCursorAdapter(rootview.getContext(), R.layout.equip_row,
                 DBHandler.getDbInstance(getContext()).cursorClassificacio(), from, to);
         listView.setAdapter(adapter);
         listView.setEmptyView(rootview.findViewById(R.id.empty));
@@ -62,43 +66,22 @@ public class ClassificacioFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //final CharSequence nom = ((TextView) view.findViewById(R.id.item_nom)).getText();
                 final int ident = Integer.parseInt(((TextView) view.findViewById(R.id.item_identificador)).getText().toString());
                 Intent intent = new Intent(getContext(), AddEditEquipActivity.class);
                 intent.putExtra("edit", true);
                 intent.putExtra("id", ident);
                 startActivity(intent);
-                //Toast.makeText(getContext(), nom, Toast.LENGTH_SHORT).show();
-                /*new AlertDialog.Builder(getContext())
-                        .setTitle(nom + " " + ident)
-                        .setMessage("Eliminar equip?")
-                        .setPositiveButton("si", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                DBHandler db = DBHandler.getDbInstance(getContext());
-                                db.deleteEquip(ident);
-                                adapter.changeCursor(db.cursorClassificacio());
-                                listView.setAdapter(adapter);
-                            }
-                        })
-                        .setNeutralButton("no", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                doNothing();
-                            }
-                        })
-                        .setNegativeButton("Calla!", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getActivity().finish();
-                            }
-                        })
-                        .show();*/
-
             }
         });
         return rootview;
     }
 
-    private void doNothing() {}
+    @Override
+    public void onResume() {
+        listView.invalidateViews();
+        adapter.changeCursor(DBHandler.getDbInstance(getContext()).cursorClassificacio());
+        listView.setAdapter(adapter);
+        super.onResume();
+
+    }
 }

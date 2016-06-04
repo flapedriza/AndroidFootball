@@ -3,6 +3,10 @@ package idi.francesc.footballleague;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
@@ -14,14 +18,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class AddEditEquipActivity extends AppCompatActivity {
     private Equip equip;
-    DBHandler dbInstance;
-    Context context = AddEditEquipActivity.this;
-    Boolean edit;
-    int idE;
+    private DBHandler dbInstance;
+    private Context context = AddEditEquipActivity.this;
+    private Boolean edit;
+    private int idE;
+    private static final int SELECT_PICTURE = 100;
+    ImageView imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +45,16 @@ public class AddEditEquipActivity extends AppCompatActivity {
                 finish();
             }
             setTitle(equip.get_nom());
-            Toast.makeText(context, "Nom: " + equip.get_nom() + " ID: " + equip.get_id() + " Punts: " +
-            equip.get_punts(), Toast.LENGTH_LONG).show();
+            imageButton.setImageBitmap(BitmapFactory.decodeByteArray(equip.get_escut(), 0, equip.get_escut().length));
+//            Toast.makeText(context, "Nom: " + equip.get_nom() + " ID: " + equip.get_id() + " Punts: " +
+//            equip.get_punts(), Toast.LENGTH_LONG).show();
 
         }
         else {
             setTitle("Nou equip");
             equip = new Equip();
         }
+        imageButton = (ImageView) findViewById(R.id.escut_select);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_equip);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_editEquip);
@@ -55,7 +65,7 @@ public class AddEditEquipActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                guardar();
             }
         });
     }
@@ -96,9 +106,29 @@ public class AddEditEquipActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+                if(selectedImageUri != null) {
+                    String path = getPathFromUri(selectedImageUri);
+                    imageButton.setImageURI(selectedImageUri);
+                }
+            }
+        }
+    }
+
     private void guardar() {
-        if (equip != null && equip.get_nom() != null) {
+        if (equip != null && equip.get_nom() != null && equip.get_id() == -1) {
             dbInstance.addEquip(equip);
+            Log.v(this.toString(), "Equip creat");
+            finish();
+        }
+        else if (equip != null && equip.get_nom() != null && equip.get_id() != -1) {
+            equip.set_punts(-5);
+            dbInstance.updateEquip(equip);
+            Log.v(this.toString(), "Equip editat");
             finish();
         }
         else {
@@ -113,5 +143,24 @@ public class AddEditEquipActivity extends AppCompatActivity {
             finish();
         }
         else finish();
+    }
+
+    public void selectImage(View view) {
+        imageButton = (ImageView) view;
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Seleccionar imatge"), SELECT_PICTURE);
+    }
+
+    private String getPathFromUri(Uri uri) {
+        String ret = null;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, proj, null, null, null);
+        if(cursor.moveToFirst()) {
+            ret = cursor.getString(cursor.getColumnIndex(proj[0]));
+        }
+        cursor.close();
+        return ret;
     }
 }
