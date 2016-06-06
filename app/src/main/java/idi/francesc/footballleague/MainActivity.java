@@ -20,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -86,24 +87,28 @@ public class MainActivity extends AppCompatActivity
         fabedit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                final DatePicker picker = new DatePicker(context);
-                builder.setTitle("Escolliu data")
-                        .setView(picker)
-                        .setPositiveButton("Acceptar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(MainActivity.this, AddPartitActivity.class);
-                                String month = (picker.getMonth() > 9) ? String.valueOf(picker.getMonth()) : "0" + picker.getMonth();
-                                String day = (picker.getDayOfMonth() > 9) ? String.valueOf(picker.getDayOfMonth()) :
-                                        "0" + picker.getDayOfMonth();
-                                String date = picker.getYear()+"-"+month+"-"+day;
-                                intent.putExtra("date",date);
-                                startActivity(intent);
-                            }
-                        })
-                        .setNegativeButton("Cancel·lar", null)
-                        .show();
+                if (DBHandler.getDbInstance(context).getNombreEquips() >= 2) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    final DatePicker picker = new DatePicker(context);
+                    builder.setTitle("Escolliu data")
+                            .setView(picker)
+                            .setPositiveButton("Acceptar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(MainActivity.this, AddPartitActivity.class);
+                                    int monthNum = picker.getMonth() +1;
+                                    String month = (monthNum > 9) ? String.valueOf(monthNum) : "0" + monthNum;
+                                    String day = (picker.getDayOfMonth() > 9) ? String.valueOf(picker.getDayOfMonth()) :
+                                            "0" + picker.getDayOfMonth();
+                                    String date = picker.getYear()+"-"+month+"-"+day;
+                                    intent.putExtra("date",date);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("Cancel·lar", null)
+                            .show();
+                } else Snackbar.make(view, "Calen com a mínim 2 equips per a disputar un partit", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
 
             }
         });

@@ -32,6 +32,7 @@ public class AddPartitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         dataPartit = intent.getStringExtra("date");
+        Log.v(this.toString(),"*******************\n"+dataPartit+"\n****************");
         setContentView(R.layout.activity_add_partit);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_add_partit);
         setSupportActionBar(toolbar);

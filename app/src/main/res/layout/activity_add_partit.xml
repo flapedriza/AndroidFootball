@@ -81,6 +81,7 @@
             <EditText
                 android:id="@+id/partit_gols_local"
                 android:text="0"
+                android:digits="0123456789"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:inputType="number"
@@ -101,6 +102,7 @@
                 android:textSize="20sp"/>
             <EditText
                 android:id="@+id/partit_gols_visitant"
+                android:digits="0123456789"
                 android:text="0"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

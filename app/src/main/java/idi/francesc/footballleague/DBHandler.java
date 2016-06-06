@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -109,7 +110,9 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public void addPartit(Partit partit) {
         ContentValues values = new ContentValues();
-        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_DATA, partit.get_Data().toString());
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        String data = format.format(partit.get_Data());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_DATA, data);
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL, partit.get_Local());
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, partit.get_Visitant());
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_LOCAL, partit.get_GolsLocal());
@@ -261,6 +264,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+
     public ArrayList<Jugador> getAllJugadorsEquip(String equip) {
         ArrayList<Jugador> ret = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -285,8 +289,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Cursor cursorPartits() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery("SELECT * FROM " + PartitsContract.PartitsEntry.TABLE_NAME +
-        " ORDER BY " + PartitsContract.PartitsEntry.COLUMN_NAME_DATA + " ASC", null);
+        String query = "SELECT * FROM " + PartitsContract.PartitsEntry.TABLE_NAME +
+                " ORDER BY " + PartitsContract.PartitsEntry.COLUMN_NAME_DATA + " DESC";
+        Log.v(this.toString(), query);
+        Cursor c = db.rawQuery(query, null);
         if(c != null) c.moveToFirst();
         return c;
     }
