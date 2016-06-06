@@ -1,9 +1,7 @@
 package idi.francesc.footballleague;
 
-import java.util.Comparator;
-
 /**
- * Created by franc on 23/05/2016.
+ * Created by Francesc Lapedriza
  */
 public class Equip {
     private int _id;

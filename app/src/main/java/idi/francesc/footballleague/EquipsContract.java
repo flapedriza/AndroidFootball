@@ -3,7 +3,7 @@ package idi.francesc.footballleague;
 import android.provider.BaseColumns;
 
 /**
- * Created by franc on 23/05/2016.
+ * Created by Francesc Lapedriza
  */
 public class EquipsContract {
     public EquipsContract() {}

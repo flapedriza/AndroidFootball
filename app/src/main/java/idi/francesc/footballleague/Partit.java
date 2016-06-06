@@ -1,7 +1,5 @@
 package idi.francesc.footballleague;
 
-import android.provider.Telephony;
-
 import java.util.Date;
 
 /**

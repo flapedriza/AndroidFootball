@@ -1,6 +1,5 @@
 package idi.francesc.footballleague;
 
-import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Created by Francesc Lapedriza.
@@ -295,7 +293,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        Toast.makeText(context ,(CharSequence) "CREADA DB", Toast.LENGTH_LONG).show();
+//        Toast.makeText(context ,(CharSequence) "CREADA DB", Toast.LENGTH_LONG).show();
         Log.v(this.toString(), CREATE_EQUIPS);
         db.execSQL(CREATE_EQUIPS);
         Log.v(this.toString(), "create equips");

@@ -1,7 +1,7 @@
 package idi.francesc.footballleague;
 
 /**
- * Created by franc on 23/05/2016.
+ * Created by Francesc Lapedriza.
  */
 public class Jugador {
     private int _id;
