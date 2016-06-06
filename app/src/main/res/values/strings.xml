@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">Football League</string>
+    <string name="app_name">Lliga de Futbol</string>
+    <string name="app_label">Lliga</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="action_about">Sobre l\'aplicació</string>
 
     <string name="header_equip">NOM</string>
     <string name="header_victories">V</string>

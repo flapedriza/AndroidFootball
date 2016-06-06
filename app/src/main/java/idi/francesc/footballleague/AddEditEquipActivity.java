@@ -4,22 +4,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddEditEquipActivity extends AppCompatActivity {
@@ -28,15 +26,26 @@ public class AddEditEquipActivity extends AppCompatActivity {
     private Context context = AddEditEquipActivity.this;
     private Boolean edit;
     private int idE;
+    EditText editNom;
+    EditText editCiutat;
     private static final int SELECT_PICTURE = 100;
     ImageView imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_edit_equip);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_editEquip);
+        setSupportActionBar(toolbar);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) ab.setDisplayHomeAsUpEnabled(true);
         Intent intent = getIntent();
         edit = intent.getBooleanExtra("edit", false);
         idE = intent.getIntExtra("id", 0);
         dbInstance = DBHandler.getDbInstance(context);
+        imageButton = (ImageView) findViewById(R.id.escut_select);
+        editNom = (EditText) findViewById(R.id.edit_nom_equip);
+        editCiutat = (EditText) findViewById(R.id.edit_ciutat_equip);
         if(edit) {
             equip = dbInstance.getEquipById(idE);
             if(equip.get_nom() == null) {
@@ -45,29 +54,28 @@ public class AddEditEquipActivity extends AppCompatActivity {
                 finish();
             }
             setTitle(equip.get_nom());
-            imageButton.setImageBitmap(BitmapFactory.decodeByteArray(equip.get_escut(), 0, equip.get_escut().length));
-//            Toast.makeText(context, "Nom: " + equip.get_nom() + " ID: " + equip.get_id() + " Punts: " +
-//            equip.get_punts(), Toast.LENGTH_LONG).show();
+            editNom.setText(equip.get_nom());
+            editCiutat.setText(equip.get_ciutat());
+            findViewById(R.id.dades_edit).setVisibility(View.VISIBLE);
+            TextView gfavor = (TextView) findViewById(R.id.dades_favor);
+            TextView gcontra = (TextView) findViewById(R.id.dades_contra);
+            TextView vict = (TextView) findViewById(R.id.dades_victories);
+            TextView derr = (TextView) findViewById(R.id.dades_derrotes);
+            TextView empats = (TextView) findViewById(R.id.dades_empats);
+            TextView punts = (TextView) findViewById(R.id.dades_punts);
+            gfavor.setText("Gols a favor: "+equip.get_gfavor());
+            gcontra.setText("Gols en contra: "+equip.get_gcontra());
+            vict.setText("Victories: "+equip.get_victories());
+            derr.setText("Derrotes: "+equip.get_derrotes());
+            empats.setText("Empats: "+equip.get_empats());
+            punts.setText("Punts: "+equip.get_punts());
+
 
         }
         else {
             setTitle("Nou equip");
             equip = new Equip();
         }
-        imageButton = (ImageView) findViewById(R.id.escut_select);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_edit_equip);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_editEquip);
-        setSupportActionBar(toolbar);
-        ActionBar ab = getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabok);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                guardar();
-            }
-        });
     }
 
     @Override
@@ -120,20 +128,22 @@ public class AddEditEquipActivity extends AppCompatActivity {
     }
 
     private void guardar() {
-        if (equip != null && equip.get_nom() != null && equip.get_id() == -1) {
-            dbInstance.addEquip(equip);
-            Log.v(this.toString(), "Equip creat");
-            finish();
-        }
-        else if (equip != null && equip.get_nom() != null && equip.get_id() != -1) {
-            equip.set_punts(-5);
-            dbInstance.updateEquip(equip);
-            Log.v(this.toString(), "Equip editat");
-            finish();
+        equip.set_nom( editNom.getText().toString());
+        equip.set_ciutat(editCiutat.getText().toString());
+
+        if(equip != null && !"".equals(equip.get_nom()) && !"".equals(equip.get_ciutat())) {
+            if(edit) {
+                dbInstance.updateEquip(equip);
+                finish();
+            }
+            else {
+                dbInstance.addEquip(equip);
+                finish();
+            }
         }
         else {
-            Log.e(this.toString(), "No es pot guardar l'equip, problema de dades");
-            Toast.makeText(context, "Introduïu totes les dades abans de guardar", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Introduïu totes les dades abans de desar l'equip", Toast.LENGTH_SHORT).show();
+
         }
     }
 

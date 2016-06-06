@@ -47,6 +47,11 @@ public class Equip {
         this._punts = (victories*3) + (empats);
     }
 
+    @Override
+    public String toString() {
+        return "Nom: " + _nom + " Ciutat: " + _ciutat + " \nPunts: " + _punts;
+    }
+
     public int get_id() {
         return _id;
     }
@@ -100,9 +105,7 @@ public class Equip {
     }
 
     public void set_victories(int _victories) {
-        int anterior = this._victories;
         this._victories = _victories;
-        _punts += (_victories - anterior)*3;
     }
 
     public int get_derrotes() {
@@ -118,9 +121,7 @@ public class Equip {
     }
 
     public void set_empats(int _empats) {
-        int anterior = this._empats;
         this._empats = _empats;
-        _punts += (_empats - anterior);
 
     }
 
@@ -130,5 +131,27 @@ public class Equip {
 
     public void set_punts(int _punts) {
         this._punts = _punts;
+    }
+
+    public void incrementGolsFavor(int gols) {
+        this._gfavor += gols;
+    }
+
+    public void incrementGolsContra(int gols) {
+        this._gcontra += gols;
+    }
+
+    public void addVictoria() {
+        this._victories += 1;
+        this._punts += 3;
+    }
+
+    public void addEmpat() {
+        this._punts += 1;
+        this._empats += 1;
+    }
+
+    public void addDerrota() {
+        this._derrotes += 1;
     }
 }

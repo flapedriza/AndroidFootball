@@ -61,8 +61,8 @@ public class DBHandler extends SQLiteOpenHelper {
         if(dbInstance == null) {
 //            Toast.makeText(context, "Crear DB Instance", Toast.LENGTH_SHORT).show();
             dbInstance = new DBHandler(context);
-            Partit partit = new Partit("F.C. Barcelona", "Real Madrid", new Date(2016,8,27), 6, 1);
-            Partit partit1 = new Partit("R.C.D. Espanyol", "F.C. nens paralitics", new Date(1945, 3, 21), 0, 21);
+            Partit partit = new Partit("F.C. Local", "Visitant F.C.", new Date(2016,8,27), 6, 1);
+            Partit partit1 = new Partit("R.C.D. Local", "Semper Bigottis", new Date(1945, 3, 21), 0, 21);
             dbInstance.addPartit(partit);
             dbInstance.addPartit(partit1);
         }
@@ -81,12 +81,12 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_NOM, equip.get_nom());
         values.put(EquipsContract.EquipEntry.COLUM_NAME_CIUTAT, equip.get_ciutat());
         values.put(EquipsContract.EquipEntry.COLUMN_NAME_ESCUT, equip.get_escut());
-        values.put(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV, equip.get_gfavor());
-        values.put(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA, equip.get_gcontra());
-        values.put(EquipsContract.EquipEntry.COLUMN_NAME_VICTORIES, equip.get_victories());
-        values.put(EquipsContract.EquipEntry.COLUMN_NAME_EMPATS, equip.get_empats());
-        values.put(EquipsContract.EquipEntry.COLUMN_NAME_DERROTES, equip.get_derrotes());
-        values.put(EquipsContract.EquipEntry.COLUMN_NAME_PUNTS, equip.get_punts());
+        values.put(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV, 0);
+        values.put(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA, 0);
+        values.put(EquipsContract.EquipEntry.COLUMN_NAME_VICTORIES, 0);
+        values.put(EquipsContract.EquipEntry.COLUMN_NAME_EMPATS, 0);
+        values.put(EquipsContract.EquipEntry.COLUMN_NAME_DERROTES, 0);
+        values.put(EquipsContract.EquipEntry.COLUMN_NAME_PUNTS, 0);
         SQLiteDatabase db = getWritableDatabase();
         db.insert(EquipsContract.EquipEntry.TABLE_NAME,
                 null,
@@ -97,7 +97,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(JugadorsContract.JugadorEntry.COLUMN_NAME_NOM, jugador.get_nom());
         values.put(JugadorsContract.JugadorEntry.COLUMN_NAME_COGNOMS, jugador.get_cognoms());
-        values.put(JugadorsContract.JugadorEntry.COLUMN_NAME_GOLS, jugador.get_gols());
+        values.put(JugadorsContract.JugadorEntry.COLUMN_NAME_GOLS, 0);
         values.put(JugadorsContract.JugadorEntry.COLUMN_NAME_EQUIP, jugador.get_equip());
         SQLiteDatabase db = getWritableDatabase();
         db.insert(JugadorsContract.JugadorEntry.TABLE_NAME,
@@ -111,9 +111,9 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL, partit.get_Local());
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, partit.get_Visitant());
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_LOCAL, partit.get_GolsLocal());
-        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_VISITANT, partit.get_GolsVisitant());
+        values.put(PartitsContract.PartitsEntry.COLUMN_NAME_GOLS_VISITANT, partit.get_GolsVisitant());
         SQLiteDatabase db = getWritableDatabase();
-        db.insert(EquipsContract.EquipEntry.TABLE_NAME,
+        db.insert(PartitsContract.PartitsEntry.TABLE_NAME,
                 null,
                 values);
     }
@@ -170,7 +170,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 JugadorsContract.JugadorEntry._ID + "=" + oldJugador.get_id(), null);
     }
 
-    public void updatePartit(Partit oldPartit, Partit newPartit) {
+    /*public void updatePartit(Partit oldPartit, Partit newPartit) {
         ContentValues values = new ContentValues();
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_DATA, newPartit.get_Data().toString());
         values.put(PartitsContract.PartitsEntry.COLUMN_NAME_LOCAL, newPartit.get_Local());
@@ -191,6 +191,7 @@ public class DBHandler extends SQLiteOpenHelper {
             Equip e = new Equip();
             e.set_id(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry._ID)));
             e.set_nom(c.getString(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_NOM)));
+            e.set_ciutat(c.getString(c.getColumnIndex(EquipsContract.EquipEntry.COLUM_NAME_CIUTAT)));
             e.set_escut(c.getBlob(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_ESCUT)));
             e.set_gfavor(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV)));
             e.set_gcontra(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA)));
@@ -209,7 +210,7 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
         return ret;
-    }
+    }*/
 
     public int getNombreEquips() {
         SQLiteDatabase db = getReadableDatabase();
@@ -224,12 +225,14 @@ public class DBHandler extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             equip.set_id(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry._ID)));
             equip.set_nom(c.getString(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_NOM)));
+            equip.set_ciutat(c.getString(c.getColumnIndex(EquipsContract.EquipEntry.COLUM_NAME_CIUTAT)));
             equip.set_escut(c.getBlob(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_ESCUT)));
             equip.set_gfavor(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_FAV)));
             equip.set_gcontra(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_GOLS_CONTRA)));
             equip.set_victories(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_VICTORIES)));
             equip.set_derrotes(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_DERROTES)));
             equip.set_empats(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_EMPATS)));
+            equip.set_punts(c.getInt(c.getColumnIndex(EquipsContract.EquipEntry.COLUMN_NAME_PUNTS)));
         }
         c.close();
         db.close();
@@ -279,7 +282,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        Toast.makeText(context ,(CharSequence) "CREADA DB", Toast.LENGTH_LONG).show();
+        Toast.makeText(context ,(CharSequence) "CREADA DB", Toast.LENGTH_LONG).show();
         Log.v(this.toString(), CREATE_EQUIPS);
         db.execSQL(CREATE_EQUIPS);
         Log.v(this.toString(), "create equips");
@@ -293,6 +296,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + EquipsContract.EquipEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + JugadorsContract.JugadorEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + PartitsContract.PartitsEntry.TABLE_NAME);
         onCreate(db);
     }
 
@@ -300,6 +304,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + EquipsContract.EquipEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + JugadorsContract.JugadorEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + PartitsContract.PartitsEntry.TABLE_NAME);
         onCreate(db);
     }
 }

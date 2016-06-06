@@ -1,7 +1,11 @@
 package idi.francesc.footballleague;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +17,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +28,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     private ViewPager viewPager;
     private FloatingActionButton fabedit;
     private FloatingActionButton fabadd;
+    private Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +76,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onPageSelected(int position) {
                 //showRightFab(position);
-                fabadd.show();
+                showRightFab(position);
             }
 
             @Override
@@ -80,16 +92,35 @@ public class MainActivity extends AppCompatActivity
         fabedit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Clicked edit button", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                final DatePicker picker = new DatePicker(context);
+                builder.setTitle("Escolliu data")
+                        .setView(picker)
+                        .setPositiveButton("Acceptar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(MainActivity.this, AddPartitActivity.class);
+                                String date = picker.getYear()+"-"+picker.getMonth()+"-"+picker.getDayOfMonth();
+                                intent.putExtra("date",date);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Cancel·lar", null)
+                        .show();
+
             }
         });
         fabadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddEditEquipActivity.class);
-                intent.putExtra("edit", false);
-                startActivity(intent);
+                int nequips = DBHandler.getDbInstance(context).getNombreEquips();
+                if (nequips < 10) {
+                    Intent intent = new Intent(MainActivity.this, AddEditEquipActivity.class);
+                    intent.putExtra("edit", false);
+                    startActivity(intent);
+                }
+                else Snackbar.make(view, "No hi pot haver més de 10 equips", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
@@ -130,7 +161,11 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about) {
+            Toast toast = Toast.makeText(context, "Lliga de Futbol 1.0\n Francesc Lapedriza - 2016", Toast.LENGTH_LONG);
+            TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+            if(v != null) v.setGravity(Gravity.CENTER);
+            toast.show();
             return true;
         }
 
