@@ -30,7 +30,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,6 +51,42 @@ public class MainActivity extends AppCompatActivity
         if(prefs.getBoolean("firstTime", true)) {
             DBHandler handler = DBHandler.getDbInstance(this);
             handler.dropAll();
+            Byte[] esctuts = {0};
+            ArrayList<Equip> equipsIni = new ArrayList<>();
+            String[] noms = {"F.C. Barcelona","R. Madrid", "R.C.D. Espanyol", "Inventat F.C", "F.C. MoltsGols",
+            "F.C. PocsGols", "Perdedor C.F.", "Guanyador F.C.", "Equip F.C.", "AltreEquip F.C."};
+            String[] ciutats = {"Barcelona", "Madrid", "Barcelona", "Sevilla", "Lugo", "Paris", "Londres",
+            "Lisboa", "Pekin", "Tokyo"};
+            for(int i = 0; i<noms.length; ++i) {
+                handler.addEquip(new Equip(noms[i], ciutats[i]));
+            }
+            equipsIni = handler.getAllEquips();
+            Collections.shuffle(equipsIni);
+            List<Equip> half1 = equipsIni.subList(0,5);
+            List<Equip> half2 = equipsIni.subList(5,10);
+            for(int i = 0; i< half1.size(); ++i) {
+                Random random = new Random();
+                int goloc = random.nextInt(5);
+                int golvis = random.nextInt(5);
+                half1.get(i).incrementGolsFavor(goloc);
+                half1.get(i).incrementGolsContra(golvis);
+                half2.get(i).incrementGolsFavor(golvis);
+                half2.get(i).incrementGolsContra(goloc);
+                if(goloc > golvis) {
+                    half1.get(i).addVictoria();
+                    half2.get(i).addDerrota();
+                }else if(golvis > goloc)  {
+                    half1.get(i).addDerrota();
+                    half2.get(i).addVictoria();
+                }else {
+                    half1.get(i).addEmpat();
+                    half2.get(i).addEmpat();
+                }
+                handler.updateEquip(half1.get(i));
+                handler.updateEquip(half2.get(i));
+                handler.addPartit(new Partit(half1.get(i).get_nom(), half2.get(i).get_nom(),
+                        new Date(2016,06,05),goloc, golvis));
+            }
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("firstTime",false);
             editor.commit();

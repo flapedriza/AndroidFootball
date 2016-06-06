@@ -32,6 +32,19 @@ public class Equip {
         this._punts = (_victories*3) + (_empats);
     }
 
+    public Equip(String nom, String ciutat) {
+        byte[] es = {0};
+        this._nom = nom;
+        this._ciutat = ciutat;
+        this._escut = es;
+        this._gfavor = 0;
+        this._gcontra = 0;
+        this._victories = 0;
+        this._derrotes = 0;
+        this._empats = 0;
+        this._punts = 0;
+    }
+
     public Equip(String nom, String _ciutat, byte[] escut, int gfavor, int gcontra, int victories, int derrotes, int empats) {
         this._id = -2;
         this._nom = nom;

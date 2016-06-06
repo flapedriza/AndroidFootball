@@ -185,7 +185,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.update(PartitsContract.PartitsEntry.TABLE_NAME, values,
                 JugadorsContract.JugadorEntry._ID + "=" + oldPartit.get_ID(), null);
-    }
+    }*/
 
     public ArrayList<Equip> getAllEquips() {
         ArrayList<Equip> ret = new ArrayList<>();
@@ -215,7 +215,7 @@ public class DBHandler extends SQLiteOpenHelper {
         c.close();
         db.close();
         return ret;
-    }*/
+    }
 
     public int getNombreEquips() {
         SQLiteDatabase db = getReadableDatabase();

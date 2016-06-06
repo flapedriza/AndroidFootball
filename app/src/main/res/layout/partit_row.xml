@@ -39,7 +39,7 @@
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="F.C. Local"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:layout_weight="5"
                 />
 
@@ -57,7 +57,7 @@
                 android:layout_height="?android:attr/listPreferredItemHeight"
                 android:gravity="center_vertical|center_horizontal"
                 android:text="F.C. Visitant"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:layout_weight="5"
                 />
         </LinearLayout>
