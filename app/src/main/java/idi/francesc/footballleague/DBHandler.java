@@ -18,7 +18,7 @@ import java.util.Date;
  */
 public class DBHandler extends SQLiteOpenHelper {
     private static DBHandler dbInstance;
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "football.db";
     private static final String CREATE_EQUIPS = "CREATE TABLE " + EquipsContract.EquipEntry.TABLE_NAME +
             "(" + EquipsContract.EquipEntry._ID + " INTEGER PRIMARY KEY," +
@@ -57,14 +57,18 @@ public class DBHandler extends SQLiteOpenHelper {
             "ON UPDATE CASCADE);";
     Context context;
 
+    public void dropAll() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS " + EquipsContract.EquipEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + JugadorsContract.JugadorEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + PartitsContract.PartitsEntry.TABLE_NAME);
+        onCreate(db);
+    }
+
     public static synchronized DBHandler getDbInstance(Context context) {
         if(dbInstance == null) {
 //            Toast.makeText(context, "Crear DB Instance", Toast.LENGTH_SHORT).show();
             dbInstance = new DBHandler(context);
-            Partit partit = new Partit("F.C. Local", "Visitant F.C.", new Date(2016,8,27), 6, 1);
-            Partit partit1 = new Partit("R.C.D. Local", "Semper Bigottis", new Date(1945, 3, 21), 0, 21);
-            dbInstance.addPartit(partit);
-            dbInstance.addPartit(partit1);
         }
         return dbInstance;
     }
@@ -250,6 +254,15 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+    public Cursor cursorSpin() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT * FROM " + EquipsContract.EquipEntry.TABLE_NAME + " ORDER BY " +
+                EquipsContract.EquipEntry.COLUMN_NAME_NOM + " ASC", null);
+        if(c != null) c.moveToFirst();
+        return c;
+
+    }
+
     public ArrayList<Jugador> getAllJugadorsEquip(String equip) {
         ArrayList<Jugador> ret = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -275,7 +288,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public Cursor cursorPartits() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery("SELECT * FROM " + PartitsContract.PartitsEntry.TABLE_NAME +
-        " ORDER BY " + PartitsContract.PartitsEntry.COLUMN_NAME_DATA + " DESC", null);
+        " ORDER BY " + PartitsContract.PartitsEntry.COLUMN_NAME_DATA + " ASC", null);
         if(c != null) c.moveToFirst();
         return c;
     }

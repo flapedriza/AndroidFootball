@@ -54,13 +54,14 @@ public class ClassificacioFragment extends Fragment {
             @Override
             public void onRefresh() {
                 DBHandler handler = DBHandler.getDbInstance(getContext());
-                byte[] arr = {1};
+                /*byte[] arr = {1};
                 Equip equip = new Equip("F.C. MoltsGols", "Barcelona", arr, 45, 2, 20, 10, 12);
                 Equip equip2 = new Equip("F.C. PocsGols", "Barcelona", arr, 0, 2, 20, 10, 12);
                 handler.addEquip(equip);
                 handler.addEquip(equip2);
                 SimpleCursorAdapter adapter = new SimpleCursorAdapter(rootview.getContext(), R.layout.equip_row,
-                        handler.cursorClassificacio(), from, to);
+                        handler.cursorClassificacio(), from, to);*/
+                adapter.changeCursor(handler.cursorClassificacio());
                 listView.setAdapter(adapter);
                 swipeRefreshLayout.setRefreshing(false);
             }

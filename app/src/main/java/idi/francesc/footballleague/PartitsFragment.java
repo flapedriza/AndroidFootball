@@ -55,5 +55,11 @@ public class PartitsFragment extends Fragment {
         return rootView;
     }
 
-
+    @Override
+    public void onResume() {
+        listView.invalidateViews();
+        adapter.changeCursor(DBHandler.getDbInstance(context).cursorPartits());
+        listView.setAdapter(adapter);
+        super.onResume();
+    }
 }

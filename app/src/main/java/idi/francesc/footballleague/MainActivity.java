@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if(prefs.getBoolean("firstTime", true)) {
             DBHandler handler = DBHandler.getDbInstance(this);
-            //TODO Afegir equips, jugadors i partits
+            handler.dropAll();
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("firstTime",false);
             editor.commit();
@@ -100,7 +100,10 @@ public class MainActivity extends AppCompatActivity
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent(MainActivity.this, AddPartitActivity.class);
-                                String date = picker.getYear()+"-"+picker.getMonth()+"-"+picker.getDayOfMonth();
+                                String month = (picker.getMonth() > 9) ? String.valueOf(picker.getMonth()) : "0" + picker.getMonth();
+                                String day = (picker.getDayOfMonth() > 9) ? String.valueOf(picker.getDayOfMonth()) :
+                                        "0" + picker.getDayOfMonth();
+                                String date = picker.getYear()+"-"+month+"-"+day;
                                 intent.putExtra("date",date);
                                 startActivity(intent);
                             }
